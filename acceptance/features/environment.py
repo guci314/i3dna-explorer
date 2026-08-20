@@ -14,14 +14,14 @@ import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 EXPLORER_DIR = os.path.dirname(os.path.dirname(HERE))     # explorer/（已迁出独立安家）
-REPO = os.environ.get("I3DNA_HOME") or os.path.expanduser(
-    os.path.join("~", "work", "report_generate"))          # 树与引擎所在仓
 EVIDENCE = os.path.join(EXPLORER_DIR, "acceptance", "evidence")
 FAKES = os.path.join(EXPLORER_DIR, "acceptance", "fakes")
 BASELINES = os.path.join(EXPLORER_DIR, "acceptance", "baselines")
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 sys.path.insert(0, EXPLORER_DIR)
+import i3dna_core as _core                            # noqa: E402
+REPO = _core.BASE             # 树与引擎所在仓（内嵌/旧仓/环境变量统一解析）
 _BASE_PATH = os.environ.get("PATH", "")
 
 from PyQt6.QtWidgets import QApplication          # noqa: E402

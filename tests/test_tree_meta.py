@@ -14,10 +14,9 @@ import os
 
 import pytest
 
-# 树在引擎仓（explorer 已迁出独立安家）：环境变量可指路，缺省认旧仓
-M1 = os.path.join(os.environ.get("I3DNA_HOME")
-                  or os.path.expanduser("~/work/report_generate"),
-                  "md-devloop-m1")
+import i3dna_core as _core   # 引擎家解析（内嵌/旧仓/环境变量统一走 core）
+
+M1 = os.path.join(_core.BASE, "md-devloop-m1")
 CARDS = ["双网", "弧记号", "槽家族", "点火与账", "悬账与持有单",
          "域与场所", "主体与登录", "组织变更案卷化", "类手术", "lint判据",
          "案卷与实例"]

@@ -116,11 +116,10 @@ def test_backfill_gate(tmp_path):
                       recursive=True), "放行后入账"
 
 
-# 树在引擎仓（explorer 已迁出独立安家）：环境变量可指路，缺省认旧仓
+import i3dna_core as _core   # 引擎家解析（内嵌/旧仓/环境变量统一走 core）
+
 M1_VALIDATOR = os.path.join(
-    os.environ.get("I3DNA_HOME")
-    or os.path.expanduser("~/work/report_generate"),
-    "md-devloop-m1", "域", "治理域", "类",
+    _core.BASE, "md-devloop-m1", "域", "治理域", "类",
     "目录树元知识", "校验程序", "主程序.py")
 
 AGG_CLS = """---
