@@ -18,11 +18,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 def _engine_home():
     """引擎家（engine/lint/model 与树所在的仓根）。explorer 已迁出独立
     安家（8-21：report_generate/i3dna-explorer → ~/work/explorer）：
-    环境变量 I3DNA_HOME 优先；旧仓在场则认旧仓；都否回退同仓
-    （explorer 仍住仓内时行为逐字不变）。"""
+    环境变量 I3DNA_HOME 优先；依赖内嵌 explorer 目录则认本目录
+    （mint 布局：engine/lint/树住 ~/work/explorer 肚子里）；旧仓在场
+    则认旧仓；都否回退上级（explorer 仍住仓内时行为逐字不变）。"""
     env = os.environ.get("I3DNA_HOME")
     if env:
         return env
+    if os.path.isdir(os.path.join(HERE, "i3dna-engine")):
+        return HERE
     old = os.path.expanduser(os.path.join("~", "work", "report_generate"))
     if os.path.isdir(os.path.join(old, "i3dna-engine")):
         return old
