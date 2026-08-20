@@ -1,0 +1,13 @@
+# i3dna-explorer 测试依赖
+# 基础框架
+pytest>=7.0.0
+pytest-qt>=4.2.0
+
+# 可选：覆盖率
+# pytest-cov>=4.0.0
+
+# 可选：性能分析
+# pytest-benchmark>=4.0.0
+
+# 可选：视觉测试
+# pytest-qtvisual>=0.1.0

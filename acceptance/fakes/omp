@@ -1,0 +1,45 @@
+#!/bin/bash
+# 验收桩 omp：①write 模式点火（prompt 含【产物→写到】）→ 照域意键写产物
+# 文件（立域起草站：申请.md+域.md 落案卷暂存区）；②代笔车道 → 输出含
+# 意图的确定性代笔稿。
+f=""
+for a in "$@"; do
+  case "$a" in @*) f="${a#@}";; esac
+done
+python3 - "$f" <<'PY'
+import os, re, sys
+try:
+    txt = open(sys.argv[1], encoding="utf-8").read() if sys.argv[1] else sys.stdin.read()
+except Exception:
+    txt = sys.stdin.read()
+
+def key(k):
+    m = re.search(rf"{k}[:：]\s*(\S+)", txt)
+    return m.group(1) if m else "未给"
+
+if "【产物→写到】" in txt:
+    # 引擎 write 模式：产物直写绝对路径（暂存区），引擎验收后原子落位。
+    # 从域意（prompt 内嵌的案卷输入）取键，保证 申请/域.md 与校验程序对得上。
+    for p in re.findall(r"【产物→写到】(\S+)", txt):
+        os.makedirs(os.path.dirname(p), exist_ok=True)
+        base = os.path.basename(p)
+        if base == "申请.md":
+            body = (f"---\n域名: {key('域名')}\n域主: {key('域主')}\n"
+                    f"职责: {key('职责')}\n说明: 桩起草\n---\n"
+                    "# 申请：立域（桩引擎代起草）\n")
+        elif base == "域.md":
+            body = (f"---\ni3dna: 域\n域主: {key('域主')}\n"
+                    f"职责: {key('职责')}\n跨域白名单: []\n---\n"
+                    f"# {key('域名')}\n（桩起草 doctrine）\n")
+        else:
+            body = "桩产物\n"
+        with open(p, "w", encoding="utf-8") as f:
+            f.write(body)
+    print("完成")
+else:
+    intent = "（未提取到意图）"
+    if "[改动意图]" in txt:
+        lines = [x.strip() for x in txt.split("[改动意图]", 1)[1].splitlines()]
+        intent = lines[0] if lines else intent
+    print(f"代笔稿（桩）：客户需求全文已按意图改写 —— {intent[:60]}")
+PY
